@@ -54,7 +54,7 @@ export class DropdownV4 {
       // stop default event on mouse click.
       evt.preventDefault();
     });
-
+    
     this._dd.on('keyup', (evt: JQueryEventObject) => {
       if (this.shown) {
         switch (evt.which) {
@@ -240,7 +240,9 @@ export class DropdownV4 {
 
   protected itemSelectedLaunchEvent(item: any): void {
     // launch selected event
-    // console.log('itemSelectedLaunchEvent', item);
+    
+    this.hide();
+    console.log('itemSelectedLaunchEvent----------->>>>>>>>>>>>>>>>>****************', item);
     this._$el.trigger('autocomplete.select', item)
   }
 

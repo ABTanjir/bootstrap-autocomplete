@@ -204,6 +204,11 @@ export class AutoComplete {
   }
 
   private bindDefaultEventListeners(): void {
+      
+    this._$el.on('click', function(evt){
+        $(this).select()
+    });
+
     this._$el.on('keydown', (evt: JQueryEventObject) => {
       // console.log('keydown', evt.which, evt);
       switch (evt.which) {
@@ -275,10 +280,12 @@ export class AutoComplete {
           // this._dd.focusPreviousItem();
           break;
         default:
-          // reset selectedItem as we modified input value (related to issue #71)
-          this._selectedItem = null;
-          const newValue = this._$el.val() as string;
-          this.handlerTyped(newValue);
+            console.log("default key bind")
+            // reset selectedItem as we modified input value (related to issue #71)
+            this._selectedItem = null;
+            const newValue = this._$el.val() as string;
+            window.clearTimeout(this.requestTID);
+            this.handlerTyped(newValue);
       }
 
     });
@@ -379,24 +386,29 @@ export class AutoComplete {
 
     // request throttling
     if (this.requestTID) {
-        window.clearTimeout(this.requestTID);
+        console.log("Cleared <<< timeout...")
+        
     }
-    this.requestTID = window.setTimeout(() => {
-        if (this._settings.events.search !== null) {
-            this._settings.events.search(this._searchText, (results: any) => {
-                this.postSearchCallback(results);
-            }, this._$el);
-        } else {
-        // Default behaviour
-        // search using current resolver
-            if (this.resolver) {
-                this.resolver.search(this._searchText, (results: any) => {
-                    console.log("results ajax>>", results)
+    window.clearTimeout(this.requestTID);
+    if(this._searchText.length){
+        this.requestTID = window.setTimeout(() => {
+            console.log("SET >>> timeout...")
+            if (this._settings.events.search !== null) {
+                this._settings.events.search(this._searchText, (results: any) => {
                     this.postSearchCallback(results);
-                });
+                }, this._$el);
+            } else {
+            // Default behaviour
+            // search using current resolver
+                if (this.resolver) {
+                    this.resolver.search(this._searchText, (results: any) => {
+                        console.log("results ajax>>", results)
+                        this.postSearchCallback(results);
+                    });
+                }
             }
-        }
-    }, 500);
+        }, 500);
+    }
   }
 
   private postSearchCallback(results: any): void {

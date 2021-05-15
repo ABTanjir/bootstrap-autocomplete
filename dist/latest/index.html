@@ -225,11 +225,9 @@
                                 data: { 'q': qry}
                             }).done(function (res) {
                                 if(res.length === 1){
-                                    setTimeout(() => {
-                                        $("#damaged_product").trigger('autocomplete.select', res);
-                                        return false
-                                    }, 500);
-                                    // $(this).autocomplete('close');
+                                
+                                    $(".basicAutoComplete").trigger('autocomplete.select', res);
+                                    return false                                    // $(this).autocomplete('close');
                                     // console.log(res[0].uuid);
                                 }
 
@@ -250,10 +248,11 @@
                 });
 
 				$('.basicAutoComplete').on('change', function (e) {
-					console.log('change');
+					// console.log('change');
 				});
 
 				$('.basicAutoComplete').on('autocomplete.select', function (evt, item) {
+                    console.log('auto selected:::----------------')
 					$('.basicAutoCompleteSelected').html(JSON.stringify(item));
 					$('.basicAutoCompleteCustom').html('');
 				});
