@@ -247,7 +247,7 @@ export class AutoComplete {
     });
 
     this._$el.on('keyup', (evt: JQueryEventObject) => {
-      // console.log('keyup', evt.which, evt);
+      console.log('keyup', evt.which, evt);
       // check key
       switch (evt.which) {
         case 16: // shift
