@@ -55,6 +55,7 @@ export class AutoComplete {
   private _defaultText: string = null;
   private _isSelectElement: boolean = false;
   private _selectHiddenField: JQuery;
+  protected requestTID: number;
 
   private _settings: AutoCompleteSettings = {
     resolver: 'ajax',
@@ -375,19 +376,27 @@ export class AutoComplete {
 
   private handlerDoSearch(): void {
     // custom handler may change newValue
-    if (this._settings.events.search !== null) {
-      this._settings.events.search(this._searchText, (results: any) => {
-        this.postSearchCallback(results);
-      }, this._$el);
-    } else {
-      // Default behaviour
-      // search using current resolver
-      if (this.resolver) {
-        this.resolver.search(this._searchText, (results: any) => {
-          this.postSearchCallback(results);
-        });
-      }
+
+    // request throttling
+    if (this.requestTID) {
+        window.clearTimeout(this.requestTID);
     }
+    this.requestTID = window.setTimeout(() => {
+        if (this._settings.events.search !== null) {
+            this._settings.events.search(this._searchText, (results: any) => {
+                this.postSearchCallback(results);
+            }, this._$el);
+        } else {
+        // Default behaviour
+        // search using current resolver
+            if (this.resolver) {
+                this.resolver.search(this._searchText, (results: any) => {
+                    console.log("results ajax>>", results)
+                    this.postSearchCallback(results);
+                });
+            }
+        }
+    }, 500);
   }
 
   private postSearchCallback(results: any): void {

@@ -200,11 +200,54 @@
 		<script>
 			$(function () {
 				// Basic
+                
+				// $('.basicAutoComplete').autoComplete({
+				// 	resolverSettings: {
+				// 		url: 'testdata/test-list.json'
+				// 	}
+				// });
 				$('.basicAutoComplete').autoComplete({
-					resolverSettings: {
-						url: 'testdata/test-list.json'
-					}
-				});
+                    minLength: 2,
+                    resolver: 'custom',
+                    autoSelect: true,
+                    preventEnter: true,
+                    // resolverSettings: {
+                    //     url: url+"/products/find",
+                    //     requestThrottling:500
+                    // },
+                    events: {
+                        // searchPost: function(){
+
+                        // }
+                        search: function (qry, callback, elem) {
+                            console.log('query')
+                            $.ajax( "http://localhost/app/products/find", {
+                                data: { 'q': qry}
+                            }).done(function (res) {
+                                if(res.length === 1){
+                                    setTimeout(() => {
+                                        $("#damaged_product").trigger('autocomplete.select', res);
+                                        return false
+                                    }, 500);
+                                    // $(this).autocomplete('close');
+                                    // console.log(res[0].uuid);
+                                }
+
+                                callback(res)
+                            });
+                        }
+                    },
+                    formatResult: function (item) {
+                        return {
+                            value: item.uuid,
+                            text: item.name + ' | #' + item.code,
+                            html: [
+                                // $('<img>').attr('src', item.gender).css("height", 18), ' ',
+                                item.name + ' | #' + item.code,
+                            ]
+                        };
+                    },
+                });
 
 				$('.basicAutoComplete').on('change', function (e) {
 					console.log('change');
