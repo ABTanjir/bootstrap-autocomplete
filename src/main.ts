@@ -253,7 +253,7 @@ export class AutoComplete {
     });
 
     this._$el.on('keyup', (evt: JQueryEventObject) => {
-      console.log('keyup', evt.which, evt);
+    //   console.log('keyup', evt.which, evt);
       // check key
       switch (evt.which) {
         case 16: // shift
@@ -280,7 +280,7 @@ export class AutoComplete {
           // this._dd.focusPreviousItem();
           break;
         default:
-            console.log("default key bind")
+            // console.log("default key bind")
             // reset selectedItem as we modified input value (related to issue #71)
             this._selectedItem = null;
             const newValue = this._$el.val() as string;
@@ -386,13 +386,13 @@ export class AutoComplete {
 
     // request throttling
     if (this.requestTID) {
-        console.log("Cleared <<< timeout...")
+        // console.log("Cleared <<< timeout...")
         
     }
     window.clearTimeout(this.requestTID);
     if(this._searchText.length){
         this.requestTID = window.setTimeout(() => {
-            console.log("SET >>> timeout...")
+            // console.log("SET >>> timeout...")
             if (this._settings.events.search !== null) {
                 this._settings.events.search(this._searchText, (results: any) => {
                     this.postSearchCallback(results);
@@ -402,7 +402,7 @@ export class AutoComplete {
             // search using current resolver
                 if (this.resolver) {
                     this.resolver.search(this._searchText, (results: any) => {
-                        console.log("results ajax>>", results)
+                        // console.log("results ajax>>", results)
                         this.postSearchCallback(results);
                     });
                 }

@@ -242,7 +242,7 @@ export class DropdownV4 {
     // launch selected event
     
     this.hide();
-    console.log('itemSelectedLaunchEvent----------->>>>>>>>>>>>>>>>>****************', item);
+    // console.log('itemSelectedLaunchEvent----------->>>>>>>>>>>>>>>>>****************', item);
     this._$el.trigger('autocomplete.select', item)
   }
 
